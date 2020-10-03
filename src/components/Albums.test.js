@@ -18,6 +18,11 @@ describe('Albums component works correctly', () => {
     expect(screen.getByText(/home/i)).toBeInTheDocument();
   });
 
+  test('Should render Album component', () => {
+    render(<Albums />);
+    expect(screen.getByText(/album/i)).toBeInTheDocument();
+  });
+
   const fakeAlbumsData = [
     {
       title: 'Fake album 1',
@@ -34,7 +39,6 @@ describe('Albums component works correctly', () => {
 
   test('Should render a list of Albums titles if data is fetched', async () => {
     axios.get.mockResolvedValueOnce(resp);
-    console.log('resp:', resp);
 
     render(<Albums />);
 
