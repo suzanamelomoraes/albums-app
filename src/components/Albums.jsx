@@ -23,12 +23,13 @@ const Albums = () => {
     <div>
       <Header />
       <div>
-        <ul data-testid='albums-list'></ul>
-        {albums.map((album) => (
-          <li key={album.id} className='albums-item' data-testid='album-item'>
-            {album.title}
-          </li>
-        ))}
+        <ul data-testid='albums-list'>
+          {albums.map((album) => (
+            <li key={album.id} className='albums-item' data-testid='album-item'>
+              {album.title}
+            </li>
+          ))}
+        </ul>
       </div>
       <Album />
     </div>
