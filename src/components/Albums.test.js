@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitForElement } from '@testing-library/react';
 import axios from 'axios';
 import Albums from './Albums';
 
@@ -29,10 +29,18 @@ describe('Albums component works correctly', () => {
 
   test('Should render a list of Albums titles if data is fetched', async () => {
     axios.get.mockResolvedValueOnce(resp);
+    console.log('resp:', resp);
 
     render(<Albums />);
 
     const listAlbumElement = screen.getByTestId('albums-list');
     expect(listAlbumElement).toBeEmpty();
+
+    await waitForElement(() =>
+      screen.getAllByTestId('album-item').map((item) => item.context)
+    );
+
+    expect(axios.get).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('Fake album 1')).toBeInTheDocument();
   });
 });
