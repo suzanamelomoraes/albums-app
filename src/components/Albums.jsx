@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import * as api from '../api/albums';
+import Header from './Header';
 
 const Albums = () => {
   const [albums, setAlbumns] = useState([]);
@@ -19,13 +20,15 @@ const Albums = () => {
 
   return (
     <div>
-      <h1>Albums</h1>
-      <ul data-testid='albums-list'></ul>
-      {albums.map((album) => (
-        <li key={album.id} className='albums-item' data-testid='album-item'>
-          {album.title}
-        </li>
-      ))}
+      <Header />
+      <div>
+        <ul data-testid='albums-list'></ul>
+        {albums.map((album) => (
+          <li key={album.id} className='albums-item' data-testid='album-item'>
+            {album.title}
+          </li>
+        ))}
+      </div>
     </div>
   );
 };
