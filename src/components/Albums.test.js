@@ -13,6 +13,11 @@ describe('Albums component works correctly', () => {
     expect(AlbumsComponent).toBeTruthy();
   });
 
+  test('Should render Header component', () => {
+    render(<Albums />);
+    expect(screen.getByText(/home/i)).toBeInTheDocument();
+  });
+
   const fakeAlbumsData = [
     {
       title: 'Fake album 1',
