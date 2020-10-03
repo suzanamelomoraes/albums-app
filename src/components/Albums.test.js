@@ -20,7 +20,7 @@ describe('Albums component works correctly', () => {
 
   test('Should render Album component', () => {
     render(<Albums />);
-    expect(screen.getByText(/album/i)).toBeInTheDocument();
+    expect(screen.getByText(/album:/i)).toBeInTheDocument();
   });
 
   const fakeAlbumsData = [
