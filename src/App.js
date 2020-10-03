@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
+import Albums from './components/Albums';
 
 function App() {
   return (
     <div>
-      <h1>Albums</h1>
+      <Albums />
     </div>
   );
 }
