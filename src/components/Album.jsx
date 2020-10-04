@@ -43,12 +43,16 @@ const Album = () => {
   }, [selectedAlbumId]);
 
   return (
-    <div>
+    <div className='album-photos'>
       <h3>Album photos:</h3>
-      <div>
-        <ul data-testid='thumbnail-list'>
+      <div className='container'>
+        <ul className='thumbnail-list' data-testid='thumbnail-list'>
           {albumPhotos.map((photo) => (
-            <li key={photo.id} data-testid='thumbnail-item'>
+            <li
+              className='thumbnail-item'
+              key={photo.id}
+              data-testid='thumbnail-item'
+            >
               <img
                 onClick={() => toggleModal(photo.id, photo.url)}
                 src={photo.thumbnailUrl}

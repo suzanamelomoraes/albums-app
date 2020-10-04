@@ -5,7 +5,7 @@ import Albums from './components/Albums';
 
 function App() {
   return (
-    <div>
+    <div className='container'>
       <Router>
         <Albums />
       </Router>
