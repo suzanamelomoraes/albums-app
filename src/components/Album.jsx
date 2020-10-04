@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import * as api from '../api/photos';
+import Modal from './Modal';
 
 const Album = () => {
   let { id } = useParams();
   let selectedAlbumId = Number(id);
+
+  const [handlePhotoModal, setHandlePhotoModal] = useState({
+    selectedIndex: '',
+    modalOpen: false,
+    photo: '',
+  });
+
+  const toggleModal = (selectedIndex, photoUrl) => {
+    setHandlePhotoModal({
+      modalOpen: true,
+      selectedIndex,
+      photo: photoUrl,
+    });
+  };
+
+  const closePhotoModal = () =>
+    setHandlePhotoModal({
+      selectedIndex: '',
+      modalOpen: false,
+    });
 
   const [albumPhotos, setAlbumPhotos] = useState([]);
 
@@ -13,7 +34,6 @@ const Album = () => {
       try {
         const res = await api.getPhotosByAlbumId(selectedAlbumId);
         const selectedAlbumDetails = res.data;
-        console.log('selectedAlbumDetails: --->', selectedAlbumDetails);
         setAlbumPhotos(selectedAlbumDetails);
       } catch (error) {
         console.log(error.message);
@@ -29,11 +49,24 @@ const Album = () => {
         <ul data-testid='thumbnail-list'>
           {albumPhotos.map((photo) => (
             <li key={photo.id} data-testid='thumbnail-item'>
-              <img src={photo.thumbnailUrl} alt='thumbnail' />
+              <img
+                onClick={() => toggleModal(photo.id, photo.url)}
+                src={photo.thumbnailUrl}
+                alt='thumbnail'
+              />
+
               {photo.thumbnailUrl}
             </li>
           ))}
         </ul>
+
+        {handlePhotoModal.modalOpen && (
+          <Modal
+            closePhotoModal={closePhotoModal}
+            show={handlePhotoModal.modalOpen}
+            photo={handlePhotoModal.photo}
+          />
+        )}
       </div>
     </div>
   );
