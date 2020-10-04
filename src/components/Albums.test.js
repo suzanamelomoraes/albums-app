@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, waitForElement } from '@testing-library/react';
+import { MemoryRouter, Route } from 'react-router-dom';
 import axios from 'axios';
 import Albums from './Albums';
 
@@ -11,18 +12,13 @@ describe('Albums component works correctly', () => {
   });
 
   test('Should render Albums component', () => {
-    const AlbumsComponent = render(<Albums />);
+    const AlbumsComponent = render(<Albums />, { wrapper: MemoryRouter });
     expect(AlbumsComponent).toBeTruthy();
   });
 
   test('Should render Header component', () => {
-    render(<Albums />);
+    render(<Albums />, { wrapper: MemoryRouter });
     expect(screen.getByText(/home/i)).toBeInTheDocument();
-  });
-
-  test('Should render Album component', () => {
-    render(<Albums />);
-    expect(screen.getByText(/album:/i)).toBeInTheDocument();
   });
 
   const fakeAlbumsData = [
@@ -44,7 +40,7 @@ describe('Albums component works correctly', () => {
 
     console.log('resp', resp);
 
-    render(<Albums />);
+    render(<Albums />, { wrapper: MemoryRouter });
 
     const listAlbumElement = screen.getByTestId('albums-list');
     expect(listAlbumElement).toBeEmpty();
@@ -53,7 +49,7 @@ describe('Albums component works correctly', () => {
       screen.getAllByTestId('album-item').map((item) => item.context)
     );
 
-    expect(axios.get).toHaveBeenCalledTimes(2);
+    expect(axios.get).toHaveBeenCalledTimes(1);
     expect(screen.getByText('Fake album 1')).toBeInTheDocument();
   });
 });
