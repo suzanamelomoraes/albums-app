@@ -1,11 +1,11 @@
-# Albums' store
+# Albums' App
 
 An application that displays a list of albums and photos developed using TDD (Test-driven development) process.
 
 ### Technologies
 
 - React
-- React testing Libraries
+- React Testing Libraries
 
 ### Available Scripts
 
