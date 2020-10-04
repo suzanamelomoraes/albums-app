@@ -3,6 +3,8 @@ import { render, screen, waitForElement } from '@testing-library/react';
 import axios from 'axios';
 import Albums from './Albums';
 
+jest.mock('axios');
+
 describe('Albums component works correctly', () => {
   afterEach(() => {
     jest.clearAllMocks();
@@ -38,7 +40,9 @@ describe('Albums component works correctly', () => {
   const resp = { data: fakeAlbumsData };
 
   test('Should render a list of Albums titles if data is fetched', async () => {
-    axios.get.mockResolvedValueOnce(resp);
+    axios.get.mockResolvedValue(resp);
+
+    console.log('resp', resp);
 
     render(<Albums />);
 
@@ -49,7 +53,7 @@ describe('Albums component works correctly', () => {
       screen.getAllByTestId('album-item').map((item) => item.context)
     );
 
-    expect(axios.get).toHaveBeenCalledTimes(1);
+    expect(axios.get).toHaveBeenCalledTimes(2);
     expect(screen.getByText('Fake album 1')).toBeInTheDocument();
   });
 });
