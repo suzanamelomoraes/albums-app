@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Route, Link } from 'react-router-dom';
 import * as api from '../api/albums';
 import Header from './Header';
 import Album from './Album';
@@ -20,18 +21,28 @@ const Albums = () => {
   }, []);
 
   return (
-    <div>
+    <div className='flex-container'>
       <Header />
-      <div>
-        <ul data-testid='albums-list'>
-          {albums.map((album) => (
-            <li key={album.id} className='albums-item' data-testid='album-item'>
-              {album.title}
-            </li>
-          ))}
-        </ul>
+      <div className='albums'>
+        <div>
+          <Route path='/'>
+            <ul className='albums-list' data-testid='albums-list'>
+              {albums.map((album) => (
+                <li key={album.id} data-testid='album-item'>
+                  <Link className='albums-item' to={`/photos/${album.id}`}>
+                    {album.title}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Route>
+        </div>
+        <div>
+          <Route path='/photos/:id'>
+            <Album />
+          </Route>
+        </div>
       </div>
-      <Album />
     </div>
   );
 };
