@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, MemoryRouter, useParams } from 'react-router-dom';
 import { render, screen, waitForElement } from '@testing-library/react';
 import axios from 'axios';
 import Album from './Album';
@@ -11,7 +12,13 @@ describe('Albums component works correctly', () => {
   });
 
   test('Should render Album component', () => {
-    const AlbumComponent = render(<Album />);
+    const AlbumComponent = render(
+      <MemoryRouter initialEntries={['/photos/1']}>
+        <Route path='/photos/:id'>
+          <Album />
+        </Route>
+      </MemoryRouter>
+    );
     expect(AlbumComponent).toBeTruthy();
   });
 
@@ -65,10 +72,25 @@ describe('Albums component works correctly', () => {
 
   const resp = { data: fakePhotosAlbumData };
 
-  test('Should render a list of Albums titles if data is fetched', async () => {
+  test('Should render a list of Album photos if data is fetched', async () => {
+    jest.mock('react-router-dom', () => ({
+      ...jest.requireActual('react-router-dom'),
+      useParams: () => ({ id: 1 }),
+    }));
+
     axios.get.mockResolvedValue(resp);
 
-    render(<Album />);
+    console.log('useParams', useParams);
+
+    render(
+      <MemoryRouter initialEntries={['/photos/1']}>
+        <Route path='/photos/:id'>
+          <Album />
+        </Route>
+      </MemoryRouter>
+    );
+
+    expect(jest.isMockFunction(MemoryRouter)).toBe(false);
 
     const listAlbumElement = screen.getByTestId('thumbnail-list');
     expect(listAlbumElement).toBeEmpty();
