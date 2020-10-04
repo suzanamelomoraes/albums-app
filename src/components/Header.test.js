@@ -1,15 +1,16 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import Header from './Header';
 
-describe('Header component displays Title and Link to home', () => {
-  test('Should render Header component', () => {
-    const HeaderComponent = render(<Header />);
+describe('Renders <Header /> component and its elements correctly', () => {
+  test('Header component is rendering and navigating', () => {
+    const HeaderComponent = render(<Header />, { wrapper: MemoryRouter });
     expect(HeaderComponent).toBeTruthy();
   });
 
-  test('App should render Title', () => {
-    render(<Header />);
+  test('Header should render Title', () => {
+    render(<Header />, { wrapper: MemoryRouter });
     expect(screen.getByText(/home/i)).toBeInTheDocument();
   });
 });
