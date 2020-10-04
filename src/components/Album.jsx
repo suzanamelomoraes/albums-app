@@ -1,39 +1,40 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import * as api from '../api/photos';
 
 const Album = () => {
-  const [albumPhotos, setAlbumPhotos] = useState([]);
+  let { id } = useParams();
+  let selectedAlbumId = Number(id);
 
-  const albumIdLink = 1;
+  const [albumPhotos, setAlbumPhotos] = useState([]);
 
   useEffect(() => {
     const getPhotosByAlbumId = async () => {
       try {
-        const res = await api.getPhotosByAlbumId();
-        const array = res.data;
-        console.log('array:', array);
-        const photosByAlbumID = array.filter(
-          (item) => item.albumId === albumIdLink
-        );
-        setAlbumPhotos(photosByAlbumID);
-        console.log('photosByAlbumID:', photosByAlbumID);
+        const res = await api.getPhotosByAlbumId(selectedAlbumId);
+        const selectedAlbumDetails = res.data;
+        console.log('selectedAlbumDetails: --->', selectedAlbumDetails);
+        setAlbumPhotos(selectedAlbumDetails);
       } catch (error) {
         console.log(error.message);
       }
     };
     getPhotosByAlbumId();
-  }, []);
+  }, [selectedAlbumId]);
 
   return (
     <div>
-      <h1>Album:</h1>
-      <ul data-testid='thumbnail-list'>
-        {albumPhotos.map((photo) => (
-          <li key={photo.id} data-testid='thumbnail-item'>
-            {photo.thumbnailUrl}
-          </li>
-        ))}
-      </ul>
+      <h3>Album photos:</h3>
+      <div>
+        <ul data-testid='thumbnail-list'>
+          {albumPhotos.map((photo) => (
+            <li key={photo.id} data-testid='thumbnail-item'>
+              <img src={photo.thumbnailUrl} alt='thumbnail' />
+              {photo.thumbnailUrl}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
