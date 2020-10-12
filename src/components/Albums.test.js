@@ -1,15 +1,29 @@
 import React from 'react';
 import { render, screen, waitForElement } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import axios from 'axios';
+import * as api from '../api/albums';
 import Albums from './Albums';
 
-jest.mock('axios');
+const mockAlbumsData = [
+  { id: 1, title: 'Fake album 1' },
+  { id: 2, title: 'Fake album 2' },
+  { id: 3, title: 'Fake album 3' },
+];
+
+jest.mock('../api/albums', () => {
+  return {
+    getAlbums: jest.fn(() =>
+      Promise.resolve({
+        data: mockAlbumsData,
+      })
+    ),
+  };
+});
 
 describe('Albums component works correctly', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  //   afterEach(() => {
+  //     jest.clearAllMocks();
+  //   });
 
   test('Should render Albums component', () => {
     const AlbumsComponent = render(<Albums />, { wrapper: MemoryRouter });
@@ -21,35 +35,14 @@ describe('Albums component works correctly', () => {
     expect(screen.getByText(/home/i)).toBeInTheDocument();
   });
 
-  const fakeAlbumsData = [
-    {
-      title: 'Fake album 1',
-    },
-    {
-      title: 'Fake album 2',
-    },
-    {
-      title: 'Fake album 3',
-    },
-  ];
-
-  const resp = { data: fakeAlbumsData };
-
   test('Should render a list of Albums titles if data is fetched', async () => {
-    axios.get.mockResolvedValue(resp);
-
-    console.log('resp', resp);
-
     render(<Albums />, { wrapper: MemoryRouter });
 
     const listAlbumElement = screen.getByTestId('albums-list');
     expect(listAlbumElement).toBeEmpty();
 
-    await waitForElement(() =>
-      screen.getAllByTestId('album-item').map((item) => item.context)
-    );
+    await waitForElement(() => screen.getAllByTestId('album-item'));
 
-    expect(axios.get).toHaveBeenCalledTimes(1);
     expect(screen.getByText('Fake album 1')).toBeInTheDocument();
   });
 });
