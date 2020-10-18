@@ -12,18 +12,14 @@ const mockAlbumsData = [
 
 jest.mock('../api/albums', () => {
   return {
-    getAlbums: jest.fn(() =>
-      Promise.resolve({
-        data: mockAlbumsData,
-      })
-    ),
+    getAlbums: jest.fn(),
   };
 });
 
 describe('Albums component works correctly', () => {
-  //   afterEach(() => {
-  //     jest.clearAllMocks();
-  //   });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
   test('Should render Albums component', () => {
     const AlbumsComponent = render(<Albums />, { wrapper: MemoryRouter });
@@ -36,12 +32,19 @@ describe('Albums component works correctly', () => {
   });
 
   test('Should render a list of Albums titles if data is fetched', async () => {
+    api.getAlbums.mockImplementation(() => {
+        return Promise.resolve({
+            data: mockAlbumsData,
+        })
+    })
     render(<Albums />, { wrapper: MemoryRouter });
 
     const listAlbumElement = screen.getByTestId('albums-list');
     expect(listAlbumElement).toBeEmpty();
 
     await waitForElement(() => screen.getAllByTestId('album-item'));
+
+    expect(api.getAlbums).toHaveBeenCalledTimes(1);
 
     expect(screen.getByText('Fake album 1')).toBeInTheDocument();
   });
